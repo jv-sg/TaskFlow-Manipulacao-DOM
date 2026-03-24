@@ -64,9 +64,16 @@ header > h1 {
     padding: 12px;
     font-size: 1.6rem;
     color: #6b778c;
+    margin: 15px 0;
 }
 
 .column--highlight {
     background-color: #deebff;
     border: 2px solid #2482ff;
+}
+
+.card__atividade{
+    display: flex;
+    justify-content: space-between;
+
 }
