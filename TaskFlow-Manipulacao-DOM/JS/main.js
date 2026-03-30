@@ -1,11 +1,6 @@
-// =============================================
-//  TaskFlow — main.js
-//  Features: localStorage, drag & drop, touch, PWA
-// =============================================
-
 'use strict';
 
-// ---- PWA: Register Service Worker ----
+// ---- PWA: Service Worker ----
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('../sw.js')
@@ -18,23 +13,19 @@ if ('serviceWorker' in navigator) {
 const STORAGE_KEY = 'taskflow_cards_v2';
 const HINT_KEY = 'taskflow_hint_dismissed';
 
-// ---- State ----
-let cards = [];         // Array of card objects
+
+let cards = [];
 let draggedCard = null;
 let touchTimeout = null;
 let lastTap = 0;
 
-// ---- Card Object Shape ----
-// { id, text, priority, checked, columnId, order }
-
-// ---- DOM References ----
+// ---- Referencias do DOM ----
 const columns = document.querySelectorAll('.column__cards');
 const toast = document.getElementById('toast');
 const totalCardsEl = document.getElementById('totalCards');
 const hintBar = document.getElementById('hintBar');
 const addHintBtn = document.getElementById('addHintBtn');
 
-// ---- Storage ----
 const loadCards = () => {
     try {
         return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -48,7 +39,6 @@ const saveCards = () => {
     updateStats();
 };
 
-// ---- Toast Notification ----
 let toastTimeout;
 const showToast = (msg) => {
     clearTimeout(toastTimeout);
@@ -62,7 +52,6 @@ const updateStats = () => {
     const total = cards.length;
     totalCardsEl.textContent = `${total} card${total !== 1 ? 's' : ''}`;
 
-    // Update column counts
     document.querySelectorAll('.columns-column').forEach(col => {
         const colId = col.dataset.column;
         const count = cards.filter(c => c.columnId === colId).length;
@@ -71,15 +60,11 @@ const updateStats = () => {
     });
 };
 
-// ---- Generate ID ----
 const genId = () => `card_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
-// ---- Render all cards from state ----
 const renderAll = () => {
-    // Clear all columns
     columns.forEach(col => col.innerHTML = '');
 
-    // Sort by order within each column
     const sorted = [...cards].sort((a, b) => a.order - b.order);
     sorted.forEach(cardData => {
         const colEl = document.querySelector(`.column__cards[data-column-id="${cardData.columnId}"]`);
@@ -92,7 +77,6 @@ const renderAll = () => {
     updateStats();
 };
 
-// ---- Build card DOM from data object ----
 const buildCardElement = (cardData) => {
     const card = document.createElement('div');
     card.className = `card ${cardData.priority}${cardData.checked ? ' card__taxado' : ''}`;
@@ -131,7 +115,6 @@ const buildCardElement = (cardData) => {
         }
     });
 
-    // Priority select
     select.addEventListener('change', () => {
         const data = cards.find(c => c.id === cardData.id);
         if (data) {
@@ -142,12 +125,10 @@ const buildCardElement = (cardData) => {
         }
     });
 
-    // Text editing
     textArea.addEventListener('blur', () => {
         const text = textArea.textContent.trim();
         const data = cards.find(c => c.id === cardData.id);
         if (!text) {
-            // Remove card if empty on blur
             cards = cards.filter(c => c.id !== cardData.id);
             card.remove();
             saveCards();
@@ -167,7 +148,6 @@ const buildCardElement = (cardData) => {
         }
     });
 
-    // Delete button
     deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         cards = cards.filter(c => c.id !== cardData.id);
@@ -181,17 +161,15 @@ const buildCardElement = (cardData) => {
         showToast('Card removido');
     });
 
-    // Drag events
     card.addEventListener('dragstart', onDragStart);
     card.addEventListener('dragend', onDragEnd);
 
-    // Touch events
     addTouchEvents(card);
 
     return card;
 };
 
-// ---- Create new card ----
+// ----------- Criador de cards --------
 const createNewCard = (columnId) => {
     const colEl = document.querySelector(`.column__cards[data-column-id="${columnId}"]`);
     if (!colEl) return;
@@ -213,22 +191,18 @@ const createNewCard = (columnId) => {
     colEl.appendChild(cardEl);
     updateStats();
 
-    // Focus on text area
     const textArea = cardEl.querySelector('.card__text');
     textArea.focus();
 
-    // Scroll to new card
     cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 };
 
-// ---- Escape HTML to prevent XSS ----
 const escapeHtml = (str) => {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
 };
 
-// ---- Sync card orders after drop ----
 const syncColumnOrder = (colEl) => {
     const colId = colEl.dataset.columnId;
     const cardEls = colEl.querySelectorAll('.card');
@@ -241,7 +215,6 @@ const syncColumnOrder = (colEl) => {
     });
 };
 
-// ---- DRAG & DROP (Desktop) ----
 const onDragStart = (e) => {
     draggedCard = e.currentTarget;
     draggedCard.classList.add('dragging');
@@ -280,12 +253,11 @@ const onDrop = (e) => {
     if (draggedCard) {
         colEl.appendChild(draggedCard);
         syncColumnOrder(colEl);
-        // Also sync old column if it was different
         saveCards();
     }
 };
 
-// ---- TOUCH DRAG (Mobile) ----
+// =====---- TOUCH DRAG (Mobile) ----===
 const addTouchEvents = (card) => {
     card.addEventListener('touchstart', (e) => {
         if (e.target.tagName === 'SELECT' || e.target.type === 'checkbox' || e.target.tagName === 'BUTTON') return;
@@ -334,7 +306,6 @@ const addTouchEvents = (card) => {
     }, { passive: false });
 };
 
-// ---- Column click/double-click to create card ----
 const setupColumns = () => {
     columns.forEach((colEl) => {
         colEl.addEventListener('dragover', onDragOver);
@@ -345,14 +316,12 @@ const setupColumns = () => {
             saveCards();
         });
 
-        // Desktop double-click on empty area
         colEl.addEventListener('dblclick', (e) => {
             if (e.target === colEl) {
                 createNewCard(colEl.dataset.columnId);
             }
         });
 
-        // Mobile double-tap on empty area
         colEl.addEventListener('touchstart', (e) => {
             if (e.target !== colEl) return;
             const now = Date.now();
@@ -364,7 +333,6 @@ const setupColumns = () => {
     });
 };
 
-// ---- Add card buttons ----
 const setupAddButtons = () => {
     document.querySelectorAll('.btn-add-card').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -372,13 +340,11 @@ const setupAddButtons = () => {
         });
     });
 
-    // Header button: creates card in first column (To Do)
     addHintBtn?.addEventListener('click', () => {
         createNewCard('todo');
     });
 };
 
-// ---- Hint bar dismiss ----
 const setupHint = () => {
     if (localStorage.getItem(HINT_KEY)) {
         hintBar?.classList.add('hidden');
@@ -396,7 +362,6 @@ const setupHint = () => {
     }, 6000);
 };
 
-// ---- Init ----
 const init = () => {
     cards = loadCards();
     setupColumns();
