@@ -16,13 +16,13 @@ const HINT_KEY = 'taskflow_hint_dismissed';
 
 let cards = [];
 let draggedCard = null;
-let touchTimeout = null;
+let toqueTimeout = null;
 let lastTap = 0;
 
 // ---- Referencias do DOM ----
-const columns = document.querySelectorAll('.column__cards');
+const colunas = document.querySelectorAll('.column__cards');
 const toast = document.getElementById('toast');
-const totalCardsEl = document.getElementById('totalCards');
+const totalCardsElementos = document.getElementById('totalCards');
 const hintBar = document.getElementById('hintBar');
 const addHintBtn = document.getElementById('addHintBtn');
 
@@ -50,9 +50,9 @@ const showToast = (msg) => {
 // ---- Stats ----
 const updateStats = () => {
     const total = cards.length;
-    totalCardsEl.textContent = `${total} card${total !== 1 ? 's' : ''}`;
+    totalCardsElementos.textContent = `${total} card${total !== 1 ? 's' : ''}`;
 
-    document.querySelectorAll('.columns-column').forEach(col => {
+    document.querySelectorAll('.colunas-column').forEach(col => {
         const colId = col.dataset.column;
         const count = cards.filter(c => c.columnId === colId).length;
         const countEl = document.getElementById(`count-${colId}`);
@@ -63,14 +63,14 @@ const updateStats = () => {
 const genId = () => `card_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
 const renderAll = () => {
-    columns.forEach(col => col.innerHTML = '');
+    colunas.forEach(col => col.innerHTML = '');
 
     const sorted = [...cards].sort((a, b) => a.order - b.order);
     sorted.forEach(cardData => {
-        const colEl = document.querySelector(`.column__cards[data-column-id="${cardData.columnId}"]`);
-        if (colEl) {
+        const colunaElemento = document.querySelector(`.column__cards[data-column-id="${cardData.columnId}"]`);
+        if (colunaElemento) {
             const cardEl = buildCardElement(cardData);
-            colEl.appendChild(cardEl);
+            colunaElemento.appendChild(cardEl);
         }
     });
 
@@ -164,15 +164,15 @@ const buildCardElement = (cardData) => {
     card.addEventListener('dragstart', onDragStart);
     card.addEventListener('dragend', onDragEnd);
 
-    addTouchEvents(card);
+    addtoqueEvents(card);
 
     return card;
 };
 
 // ----------- Criador de cards --------
 const createNewCard = (columnId) => {
-    const colEl = document.querySelector(`.column__cards[data-column-id="${columnId}"]`);
-    if (!colEl) return;
+    const colunaElemento = document.querySelector(`.column__cards[data-column-id="${columnId}"]`);
+    if (!colunaElemento) return;
 
     const maxOrder = cards.length > 0 ? Math.max(...cards.map(c => c.order)) : 0;
 
@@ -188,7 +188,7 @@ const createNewCard = (columnId) => {
     cards.push(cardData);
 
     const cardEl = buildCardElement(cardData);
-    colEl.appendChild(cardEl);
+    colunaElemento.appendChild(cardEl);
     updateStats();
 
     const textArea = cardEl.querySelector('.card__text');
@@ -203,9 +203,9 @@ const escapeHtml = (str) => {
     return div.innerHTML;
 };
 
-const syncColumnOrder = (colEl) => {
-    const colId = colEl.dataset.columnId;
-    const cardEls = colEl.querySelectorAll('.card');
+const syncColumnOrder = (colunaElemento) => {
+    const colId = colunaElemento.dataset.columnId;
+    const cardEls = colunaElemento.querySelectorAll('.card');
     cardEls.forEach((el, i) => {
         const data = cards.find(c => c.id === el.dataset.cardId);
         if (data) {
@@ -247,19 +247,19 @@ const onDragLeave = (e) => {
 
 const onDrop = (e) => {
     e.preventDefault();
-    const colEl = e.currentTarget;
-    colEl.classList.remove('column--highlight');
+    const colunaElemento = e.currentTarget;
+    colunaElemento.classList.remove('column--highlight');
 
     if (draggedCard) {
-        colEl.appendChild(draggedCard);
-        syncColumnOrder(colEl);
+        colunaElemento.appendChild(draggedCard);
+        syncColumnOrder(colunaElemento);
         saveCards();
     }
 };
 
-// =====---- TOUCH DRAG (Mobile) ----===
-const addTouchEvents = (card) => {
-    card.addEventListener('touchstart', (e) => {
+// =====---- toque DRAG (Mobile) ----===
+const addtoqueEvents = (card) => {
+    card.addEventListener('toquestart', (e) => {
         if (e.target.tagName === 'SELECT' || e.target.type === 'checkbox' || e.target.tagName === 'BUTTON') return;
 
         const now = Date.now();
@@ -277,56 +277,56 @@ const addTouchEvents = (card) => {
         }
         lastTap = now;
 
-        touchTimeout = setTimeout(() => {
+        toqueTimeout = setTimeout(() => {
             draggedCard = card;
             card.classList.add('dragging');
         }, 450);
     }, { passive: true });
 
-    card.addEventListener('touchend', () => {
-        clearTimeout(touchTimeout);
+    card.addEventListener('toqueend', () => {
+        clearTimeout(toqueTimeout);
         if (draggedCard) {
             draggedCard.classList.remove('dragging');
             draggedCard = null;
         }
     });
 
-    card.addEventListener('touchmove', (e) => {
+    card.addEventListener('toquemove', (e) => {
         if (!draggedCard) return;
         e.preventDefault();
 
-        const touch = e.touches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        const colEl = target?.closest('.column__cards');
+        const toque = e.toquees[0];
+        const target = document.elementFromPoint(toque.clientX, toque.clientY);
+        const colunaElemento = target?.closest('.column__cards');
 
-        if (colEl && colEl !== draggedCard.parentElement) {
-            colEl.appendChild(draggedCard);
-            syncColumnOrder(colEl);
+        if (colunaElemento && colunaElemento !== draggedCard.parentElement) {
+            colunaElemento.appendChild(draggedCard);
+            syncColumnOrder(colunaElemento);
         }
     }, { passive: false });
 };
 
-const setupColumns = () => {
-    columns.forEach((colEl) => {
-        colEl.addEventListener('dragover', onDragOver);
-        colEl.addEventListener('dragenter', onDragEnter);
-        colEl.addEventListener('dragleave', onDragLeave);
-        colEl.addEventListener('drop', (e) => {
+const setupcolunas = () => {
+    colunas.forEach((colunaElemento) => {
+        colunaElemento.addEventListener('dragover', onDragOver);
+        colunaElemento.addEventListener('dragenter', onDragEnter);
+        colunaElemento.addEventListener('dragleave', onDragLeave);
+        colunaElemento.addEventListener('drop', (e) => {
             onDrop(e);
             saveCards();
         });
 
-        colEl.addEventListener('dblclick', (e) => {
-            if (e.target === colEl) {
-                createNewCard(colEl.dataset.columnId);
+        colunaElemento.addEventListener('dblclick', (e) => {
+            if (e.target === colunaElemento) {
+                createNewCard(colunaElemento.dataset.columnId);
             }
         });
 
-        colEl.addEventListener('touchstart', (e) => {
-            if (e.target !== colEl) return;
+        colunaElemento.addEventListener('toquestart', (e) => {
+            if (e.target !== colunaElemento) return;
             const now = Date.now();
             if (now - lastTap < 300) {
-                createNewCard(colEl.dataset.columnId);
+                createNewCard(colunaElemento.dataset.columnId);
             }
             lastTap = now;
         });
@@ -364,7 +364,7 @@ const setupHint = () => {
 
 const init = () => {
     cards = loadCards();
-    setupColumns();
+    setupcolunas();
     setupAddButtons();
     renderAll();
     setupHint();
