@@ -1,0 +1,35 @@
+{
+  "name": "TaskFlow",
+  "short_name": "TaskFlow",
+  "description": "Board de tarefas pessoal com suporte offline",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#0f1117",
+  "background_color": "#0f1117",
+  "lang": "pt-BR",
+  "scope": "./",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icones/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icones/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/screen.png",
+      "sizes": "887x441",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

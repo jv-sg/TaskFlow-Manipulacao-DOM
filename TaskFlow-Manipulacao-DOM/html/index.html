@@ -1,56 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="TaskFlow — Seu board de tarefas pessoal" />
+    <meta name="theme-color" content="#0f1117" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="TaskFlow" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="apple-touch-icon" href="../icones/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+        rel="stylesheet">
     <title>TaskFlow</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../css/main.css'>
-
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 
 <body>
+    <div class="app-bg">
+        <div class="bg-blob blob-1"></div>
+        <div class="bg-blob blob-2"></div>
+        <div class="bg-blob blob-3"></div>
+    </div>
+
     <main>
-        <header>
-            <span>Projetos / Manual do Dev</span>
-            <h1>Board</h1>
+        <header class="app-header">
+            <div class="header-left">
+                <span class="breadcrumb">Projetos / Manual do Dev</span>
+                <h1>Board <span class="title-accent">✦</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="board-stats" id="boardStats">
+                    <span class="stat" id="totalCards">0 cards</span>
+                </div>
+                <button class="btn-add-hint" id="addHintBtn" title="Dê duplo clique em uma coluna para criar um card">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Novo card
+                </button>
+            </div>
         </header>
 
-        <section class="main-columns">
-            <section class="columns-column">
-                <h2 class="column__title">To Do</h2>
-                <section class="column__cards">
+        <div class="hint-bar" id="hintBar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            Dê <strong>duplo clique</strong> em uma coluna para criar um novo card
+        </div>
 
-                </section>
-            </section>
+        <section class="main-columns" id="boardColumns">
+            <div class="columns-column" data-column="todo">
+                <div class="column-header">
+                    <span class="column-dot dot-todo"></span>
+                    <h2 class="column__title">To Do</h2>
+                    <span class="column-count" id="count-todo">0</span>
+                </div>
+                <div class="column__cards" data-column-id="todo"></div>
+                <button class="btn-add-card" data-column-id="todo">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Adicionar card
+                </button>
+            </div>
 
-            <section class="columns-column">
-                <h2 class="column__title">In Progress</h2>
-                <section class="column__cards">
+            <div class="columns-column" data-column="in-progress">
+                <div class="column-header">
+                    <span class="column-dot dot-progress"></span>
+                    <h2 class="column__title">In Progress</h2>
+                    <span class="column-count" id="count-in-progress">0</span>
+                </div>
+                <div class="column__cards" data-column-id="in-progress"></div>
+                <button class="btn-add-card" data-column-id="in-progress">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Adicionar card
+                </button>
+            </div>
 
-                </section>
-            </section>
+            <div class="columns-column" data-column="revisar">
+                <div class="column-header">
+                    <span class="column-dot dot-review"></span>
+                    <h2 class="column__title">Revisar</h2>
+                    <span class="column-count" id="count-revisar">0</span>
+                </div>
+                <div class="column__cards" data-column-id="revisar"></div>
+                <button class="btn-add-card" data-column-id="revisar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Adicionar card
+                </button>
+            </div>
 
-            <section class="columns-column">
-                <h2 class="column__title">Revisar</h2>
-                <section class="column__cards">
-
-                </section>
-            </section>
-
-            <section class="columns-column">
-                <h2 class="column__title">Finalizado</h2>
-                <section class="column__cards">
-
-                </section>
-            </section>
-
-
+            <div class="columns-column" data-column="finalizado">
+                <div class="column-header">
+                    <span class="column-dot dot-done"></span>
+                    <h2 class="column__title">Finalizado</h2>
+                    <span class="column-count" id="count-finalizado">0</span>
+                </div>
+                <div class="column__cards" data-column-id="finalizado"></div>
+                <button class="btn-add-card" data-column-id="finalizado">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Adicionar card
+                </button>
+            </div>
         </section>
     </main>
 
-    <script src='../JS/main.js'></script>
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="../JS/main.js"></script>
+    <script src="../sw.js"></script>
 </body>
 
 </html>
