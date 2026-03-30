@@ -3,7 +3,7 @@ const CACHE_NAME = 'taskflow-v2';
 
 const ASSETS = [
     './',
-    './html/index.html',
+    './index.html',
     './manifest.json',
     './css/main.css',
     './JS/main.js',
@@ -55,7 +55,7 @@ self.addEventListener('fetch', event => {
                 })
                 .catch(() => {
                     if (event.request.mode === 'navigate') {
-                        return caches.match('./html/index.html');
+                        return caches.match('./index.html');
                     }
                 });
 
