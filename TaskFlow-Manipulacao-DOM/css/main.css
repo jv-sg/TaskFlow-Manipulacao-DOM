@@ -58,54 +58,11 @@ body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: var(--font-body);
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     min-height: 100dvh;
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
 }
 
-/* ---- Background Blobs ---- */
-.app-bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.bg-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.12;
-}
-
-.blob-1 {
-    width: 600px;
-    height: 600px;
-    background: var(--accent-todo);
-    top: -200px;
-    left: -200px;
-}
-
-.blob-2 {
-    width: 500px;
-    height: 500px;
-    background: var(--accent-review);
-    bottom: -150px;
-    right: -150px;
-}
-
-.blob-3 {
-    width: 400px;
-    height: 400px;
-    background: var(--accent-done);
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-/* ---- Main Layout ---- */
 main {
     position: relative;
     z-index: 1;
@@ -116,7 +73,6 @@ main {
     overflow: hidden;
 }
 
-/* ---- Header ---- */
 .app-header {
     display: flex;
     align-items: center;
@@ -136,7 +92,7 @@ main {
 
 .breadcrumb {
     font-family: var(--font-body);
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 400;
     color: var(--text-muted);
     letter-spacing: 0.05em;
@@ -154,7 +110,7 @@ main {
 
 .title-accent {
     color: var(--accent-todo);
-    font-size: 0.6em;
+    font-size: 1em;
     vertical-align: super;
 }
 
@@ -171,7 +127,7 @@ main {
 
 .stat {
     font-family: var(--font-body);
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 500;
     color: var(--text-muted);
     background: var(--bg-column);
@@ -185,7 +141,7 @@ main {
     align-items: center;
     gap: 0.6rem;
     font-family: var(--font-body);
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 500;
     color: var(--text-primary);
     background: var(--accent-todo);
@@ -319,7 +275,7 @@ main {
     transition: var(--transition);
 }
 
-/* ---- Cards Area ---- */
+/* ---- Cards dos Area ---- */
 .column__cards {
     flex: 1;
     overflow-y: auto;
@@ -562,11 +518,7 @@ main {
     transform: translateX(-50%) translateY(0);
 }
 
-/* ============================
-   RESPONSIVE
-   ============================ */
-
-/* Tablets & small desktops */
+/* Tablets & desktops */
 @media (max-width: 900px) {
     .app-header {
         padding: 1.6rem 2rem 1.2rem;
@@ -602,7 +554,6 @@ main {
     .main-columns {
         padding: 1.2rem 1.2rem 1.6rem;
         gap: 1rem;
-        /* Snap scrolling on mobile */
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
     }
@@ -616,7 +567,6 @@ main {
     }
 }
 
-/* Very small screens */
 @media (max-width: 360px) {
     .columns-column {
         flex: 0 0 88vw;

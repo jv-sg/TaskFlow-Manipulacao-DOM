@@ -23,17 +23,11 @@
 </head>
 
 <body>
-    <div class="app-bg">
-        <div class="bg-blob blob-1"></div>
-        <div class="bg-blob blob-2"></div>
-        <div class="bg-blob blob-3"></div>
-    </div>
-
     <main>
         <header class="app-header">
             <div class="header-left">
                 <span class="breadcrumb">Projetos / Manual do Dev</span>
-                <h1>Board <span class="title-accent">✦</span></h1>
+                <h1>TaskFlow</h1>
             </div>
             <div class="header-right">
                 <div class="board-stats" id="boardStats">
@@ -63,7 +57,7 @@
             <div class="columns-column" data-column="todo">
                 <div class="column-header">
                     <span class="column-dot dot-todo"></span>
-                    <h2 class="column__title">To Do</h2>
+                    <h2 class="column__title">A fazer</h2>
                     <span class="column-count" id="count-todo">0</span>
                 </div>
                 <div class="column__cards" data-column-id="todo"></div>
@@ -80,7 +74,7 @@
             <div class="columns-column" data-column="in-progress">
                 <div class="column-header">
                     <span class="column-dot dot-progress"></span>
-                    <h2 class="column__title">In Progress</h2>
+                    <h2 class="column__title">Em progresso</h2>
                     <span class="column-count" id="count-in-progress">0</span>
                 </div>
                 <div class="column__cards" data-column-id="in-progress"></div>
@@ -134,7 +128,6 @@
     <div class="toast" id="toast"></div>
 
     <script src="../JS/main.js"></script>
-    <script src="../sw.js"></script>
 </body>
 
 </html>

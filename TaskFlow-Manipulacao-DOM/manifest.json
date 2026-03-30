@@ -2,7 +2,7 @@
   "name": "TaskFlow",
   "short_name": "TaskFlow",
   "description": "Board de tarefas pessoal com suporte offline",
-  "start_url": "./index.html",
+  "start_url": "./html/index.html",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#0f1117",

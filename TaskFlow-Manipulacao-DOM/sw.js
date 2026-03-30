@@ -12,7 +12,6 @@ const ASSETS = [
     'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap',
 ];
 
-// Install: cache all assets
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -22,7 +21,6 @@ self.addEventListener('install', event => {
     );
 });
 
-// Activate: remove old caches
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys()
@@ -35,7 +33,6 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch: cache-first for local assets, stale-while-revalidate for fonts
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
@@ -58,11 +55,10 @@ self.addEventListener('fetch', event => {
                 })
                 .catch(() => {
                     if (event.request.mode === 'navigate') {
-                        return caches.match('./index.html');
+                        return caches.match('./html/index.html');
                     }
                 });
 
-            // Cache-first: return cached immediately, update in background
             return cached || fetchPromise;
         })
     );
